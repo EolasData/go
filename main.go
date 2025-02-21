@@ -1684,8 +1684,15 @@ func main() {
 			usage(command)
 			os.Exit(1)
 		}
-		if options.Target == "" && filepath.Ext(outpath) == ".wasm" {
-			options.Target = "wasm"
+		if options.Target == "" && options.GOARCH == "wasm" {
+			switch options.GOOS {
+			case "js":
+				options.Target = "wasm"
+			case "wasip1":
+				options.Target = "wasip1"
+			case "wasip2":
+				options.Target = "wasip2"
+			}
 		}
 
 		err := Build(pkgName, outpath, options)
