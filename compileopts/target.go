@@ -356,17 +356,7 @@ func defaultTarget(options *Options) (*TargetSpec, error) {
 			return nil, fmt.Errorf("invalid GOMIPS=%s: must be hardfloat or softfloat", options.GOMIPS)
 		}
 	case "wasm":
-		llvmarch = "wasm32"
-		spec.CPU = "generic"
-		spec.Features = "+bulk-memory,+mutable-globals,+nontrapping-fptoint,+sign-ext,-multivalue,-reference-types"
-		spec.BuildTags = append(spec.BuildTags, "tinygo.wasm")
-		spec.CFlags = append(spec.CFlags,
-			"-mbulk-memory",
-			"-mnontrapping-fptoint",
-			"-mno-multivalue",
-			"-mno-reference-types",
-			"-msign-ext",
-		)
+		return nil, fmt.Errorf("should have used target for GOARCH=%s", options.GOARCH)
 	default:
 		return nil, fmt.Errorf("unknown GOARCH=%s", options.GOARCH)
 	}
@@ -447,22 +437,7 @@ func defaultTarget(options *Options) (*TargetSpec, error) {
 			"--no-dynamicbase",
 		)
 	case "wasip1":
-		spec.GC = "" // use default GC
-		spec.Scheduler = "asyncify"
-		spec.Linker = "wasm-ld"
-		spec.RTLib = "compiler-rt"
-		spec.Libc = "wasi-libc"
-		spec.DefaultStackSize = 1024 * 64 // 64kB
-		spec.LDFlags = append(spec.LDFlags,
-			"--stack-first",
-			"--no-demangle",
-		)
-		spec.Emulator = "wasmtime run --dir={tmpDir}::/tmp {}"
-		spec.ExtraFiles = append(spec.ExtraFiles,
-			"src/runtime/asm_tinygowasm.S",
-			"src/internal/task/task_asyncify_wasm.S",
-		)
-		llvmos = "wasi"
+		return nil, fmt.Errorf("should have used target for GOOS=%s", options.GOOS)
 	default:
 		return nil, fmt.Errorf("unknown GOOS=%s", options.GOOS)
 	}
